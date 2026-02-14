@@ -1,0 +1,139 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String    @unique
+  emailVerified DateTime?  // For NextAuth
+  password      String     // Hash required
+  image         String?    // Profile image
+  role          Role      @default(CUSTOMER)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  
+  orders        Order[]
+  addresses     Address[]
+  reviews       Review[]
+  pushSubscriptions PushSubscription[]
+}
+
+enum Role {
+  CUSTOMER
+  ADMIN
+}
+
+model Product {
+  id          String      @id @default(cuid())
+  name        String
+  slug        String      @unique
+  description String
+  price       Decimal     @db.Decimal(10, 2)
+  stock       Int         @default(0)
+  image       String      // Main image
+  images      String[]    // Gallery
+  
+  // Specs for filtering (e.g. { "memoryType": "DDR5", "socket": "AM5" })
+  specs       Json?       
+  
+  categoryId  String
+  category    Category    @relation(fields: [categoryId], references: [id])
+  
+  isNew       Boolean     @default(false)
+  isFeatured  Boolean     @default(false)
+  
+  orderItems  OrderItem[]
+  reviews     Review[]
+  
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+}
+
+model Category {
+  id          String    @id @default(cuid())
+  name        String
+  slug        String    @unique
+  products    Product[]
+}
+
+model Order {
+  id          String      @id @default(cuid())
+  userId      String?     // Nullable for guest
+  user        User?       @relation(fields: [userId], references: [id])
+  
+  status      OrderStatus @default(PENDING)
+  total       Decimal     @db.Decimal(10, 2)
+  
+  items       OrderItem[]
+  address     Address?    @relation(fields: [addressId], references: [id])
+  addressId   String?
+  
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+}
+
+enum OrderStatus {
+  PENDING
+  PAID
+  SHIPPED
+  DELIVERED
+  CANCELLED
+}
+
+model OrderItem {
+  id        String  @id @default(cuid())
+  orderId   String
+  order     Order   @relation(fields: [orderId], references: [id])
+  
+  productId String
+  product   Product @relation(fields: [productId], references: [id])
+  
+  quantity  Int
+  price     Decimal @db.Decimal(10, 2)
+}
+
+model Address {
+  id        String  @id @default(cuid())
+  userId    String? // Nullable if connected to Order but not saved to User profile (Guest)
+  user      User?   @relation(fields: [userId], references: [id])
+  
+  street    String
+  city      String
+  state     String
+  zip       String
+  country   String
+  
+  orders    Order[]
+}
+
+model Review {
+  id        String   @id @default(cuid())
+  rating    Int
+  comment   String?
+  
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  
+  productId String
+  product   Product  @relation(fields: [productId], references: [id])
+  
+  createdAt DateTime @default(now())
+}
+
+model PushSubscription {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  token     String   @unique  // FCM token
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  @@index([userId])
+}

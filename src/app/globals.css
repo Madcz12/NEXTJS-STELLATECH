@@ -1,0 +1,144 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap');
+@import "tailwindcss";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-body);
+  --font-heading: var(--font-heading);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --radius-3xl: calc(var(--radius) + 12px);
+  --radius-4xl: calc(var(--radius) + 16px);
+}
+
+:root {
+  /* Industrial Clean Light Mode */
+  --background: 220 14% 96%;
+  --foreground: 220 10% 10%;
+  
+  --card: 0 0% 100%;
+  --card-foreground: 220 10% 10%;
+  
+  --popover: 0 0% 100%;
+  --popover-foreground: 220 10% 10%;
+  
+  --primary: 262 80% 50%; /* Deep Violet */
+  --primary-foreground: 210 40% 98%;
+  
+  --secondary: 220 14% 90%;
+  --secondary-foreground: 220 10% 10%;
+  
+  --muted: 220 14% 90%;
+  --muted-foreground: 220 8% 46%;
+  
+  --accent: 262 80% 96%;
+  --accent-foreground: 262 80% 50%;
+  
+  --destructive: 0 84% 60%;
+  --destructive-foreground: 210 40% 98%;
+
+  --border: 220 13% 85%;
+  --input: 220 13% 85%;
+  --ring: 262 80% 50%;
+  
+  --radius: 0.5rem;
+  
+  --font-heading: 'Space Grotesk', sans-serif;
+  --font-body: 'Inter', sans-serif;
+}
+
+.dark {
+  /* Cyberpunk Industrial Dark Mode */
+  --background: 240 10% 4%; /* Almost black */
+  --foreground: 0 0% 98%;
+  
+  --card: 240 10% 6%;
+  --card-foreground: 0 0% 98%;
+  
+  --popover: 240 10% 6%;
+  --popover-foreground: 0 0% 98%;
+  
+  --primary: 263 70% 60%; /* Electric Violet */
+  --primary-foreground: 210 40% 98%;
+  
+  --secondary: 240 5% 15%; /* Dark Grey */
+  --secondary-foreground: 0 0% 98%;
+  
+  --muted: 240 5% 15%;
+  --muted-foreground: 240 5% 65%;
+  
+  --accent: 180 100% 50%; /* Cyan Neon */
+  --accent-foreground: 240 10% 4%;
+  
+  --destructive: 0 62% 30%;
+  --destructive-foreground: 0 0% 98%;
+  
+  --border: 240 5% 20%;
+  --input: 240 5% 20%;
+  --ring: 263 70% 60%;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-heading tracking-tight;
+  }
+}
+
+/* Glassmorphism Utilities */
+.glass {
+  @apply bg-background/60 backdrop-blur-md border border-white/10 shadow-lg;
+}
+
+.glass-panel {
+  @apply bg-card/50 backdrop-blur-xl border border-border/50;
+}
+
+/* Neon Glow Utilities */
+.text-glow {
+  text-shadow: 0 0 20px hsla(var(--primary), 0.5);
+}
+
+.border-glow {
+  box-shadow: 0 0 10px hsla(var(--primary), 0.3);
+}
