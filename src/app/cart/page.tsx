@@ -5,6 +5,7 @@ import { Minus, Plus, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { removeFromCart, updateQuantity } from "@/store/cartSlice";
+import { RemoveFromCartButton } from "@/components/cart/RemoveFromCartButton";
 
 export default function CartPage() {
   const dispatch = useAppDispatch();
@@ -74,12 +75,11 @@ export default function CartPage() {
                 </div>
               </div>
               
-              <button
-                onClick={() => handleRemove(item.id)}
-                className="cursor-pointer size-9 flex items-center justify-center rounded-md hover:bg-destructive/10 hover:text-destructive transition-colors"
-              >
-                <Trash2 className="h-4 w-4" />
-              </button>
+              <RemoveFromCartButton 
+                productId={item.id} 
+                productName={item.name} 
+                variant="icon" 
+              />
             </div>
           ))}
         </div>
