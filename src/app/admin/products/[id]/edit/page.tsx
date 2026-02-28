@@ -1,17 +1,8 @@
-"use client"
-
-import Link from "next/link";
+import { notFound } from "next/navigation";
 import { ChevronLeft } from "lucide-react";
-import { useFormStatus } from "react-dom";
-
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -23,34 +14,27 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { createProduct } from "@/lib/actions/admin";
-import { useEffect, useState } from "react";
+import { getProductById } from "@/lib/actions/products";
+import { getCategories } from "@/lib/actions/products";
+import { updateProduct } from "@/lib/actions/admin";
 
-interface Category {
-  id: string;
-  name: string;
-}
+export default async function EditProductPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params;
+  const [product, categories] = await Promise.all([
+    getProductById(id),
+    getCategories(),
+  ]);
 
-function SubmitButton() {
-  const { pending } = useFormStatus();
-  return (
-    <Button type="submit" size="sm" disabled={pending}>
-      {pending ? "Saving..." : "Save Product"}
-    </Button>
-  );
-}
+  if (!product) notFound();
 
-export default function NewProductPage() {
-  const [categories, setCategories] = useState<Category[]>([]);
-
-  useEffect(() => {
-    fetch("/api/categories")
-      .then((r) => r.json())
-      .then(setCategories);
-  }, []);
+  const updateProductWithId = updateProduct.bind(null, id);
 
   return (
-    <form action={createProduct}>
+    <form action={updateProductWithId}>
       <div className="mx-auto grid max-w-[59rem] flex-1 auto-rows-max gap-4">
         <div className="flex items-center gap-4">
           <Button variant="outline" size="icon" asChild type="button">
@@ -58,61 +42,53 @@ export default function NewProductPage() {
               <ChevronLeft className="h-4 w-4" />
             </Link>
           </Button>
-          <h1 className="flex-1 shrink-0 whitespace-nowrap text-xl font-semibold tracking-tight sm:grow-0">
-            Create Product
+          <h1 className="flex-1 text-xl font-semibold tracking-tight">
+            Edit Product
           </h1>
-          <div className="hidden items-center gap-2 md:ml-auto md:flex">
+          <div className="flex items-center gap-2 ml-auto">
             <Button variant="outline" size="sm" type="button" asChild>
               <Link href="/admin/products">Discard</Link>
             </Button>
-            <SubmitButton />
+            <Button type="submit" size="sm">Save Changes</Button>
           </div>
         </div>
 
         <div className="grid gap-4 md:grid-cols-[1fr_250px] lg:grid-cols-3 lg:gap-8">
-          {/* Left column */}
           <div className="grid auto-rows-max items-start gap-4 lg:col-span-2 lg:gap-8">
             <Card>
-              <CardHeader>
-                <CardTitle>Product Details</CardTitle>
-                <CardDescription>Enter the basic information for the product.</CardDescription>
-              </CardHeader>
+              <CardHeader><CardTitle>Product Details</CardTitle></CardHeader>
               <CardContent className="grid gap-4">
                 <div className="grid gap-2">
                   <Label htmlFor="name">Name</Label>
-                  <Input id="name" name="name" type="text" placeholder="Product name" required />
+                  <Input id="name" name="name" defaultValue={product.name} required />
                 </div>
                 <div className="grid gap-2">
                   <Label htmlFor="description">Description</Label>
-                  <Textarea id="description" name="description" placeholder="Product description" className="min-h-32" required />
+                  <Textarea id="description" name="description" defaultValue={product.description} className="min-h-32" required />
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div className="grid gap-2">
                     <Label htmlFor="price">Price ($)</Label>
-                    <Input id="price" name="price" type="number" step="0.01" placeholder="0.00" required />
+                    <Input id="price" name="price" type="number" step="0.01" defaultValue={product.price.toString()} required />
                   </div>
                   <div className="grid gap-2">
                     <Label htmlFor="stock">Stock</Label>
-                    <Input id="stock" name="stock" type="number" placeholder="0" defaultValue="0" />
+                    <Input id="stock" name="stock" type="number" defaultValue={product.stock} />
                   </div>
                 </div>
               </CardContent>
             </Card>
 
             <Card>
-              <CardHeader>
-                <CardTitle>Category</CardTitle>
-              </CardHeader>
+              <CardHeader><CardTitle>Category</CardTitle></CardHeader>
               <CardContent>
-                <Select name="categoryId" required>
-                  <SelectTrigger id="categoryId">
+                <Select name="categoryId" defaultValue={product.categoryId}>
+                  <SelectTrigger>
                     <SelectValue placeholder="Select a category" />
                   </SelectTrigger>
                   <SelectContent>
                     {categories.map((cat) => (
-                      <SelectItem key={cat.id} value={cat.id}>
-                        {cat.name}
-                      </SelectItem>
+                      <SelectItem key={cat.id} value={cat.id}>{cat.name}</SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
@@ -120,44 +96,34 @@ export default function NewProductPage() {
             </Card>
           </div>
 
-          {/* Right column */}
           <div className="grid auto-rows-max items-start gap-4 lg:gap-8">
             <Card>
-              <CardHeader>
-                <CardTitle>Product Image</CardTitle>
-                <CardDescription>Enter an image URL.</CardDescription>
-              </CardHeader>
-              <CardContent>
+              <CardHeader><CardTitle>Product Image</CardTitle></CardHeader>
+              <CardContent className="grid gap-4">
+                {product.image && (
+                  <img src={product.image} alt={product.name} className="aspect-square rounded-md object-cover border" />
+                )}
                 <div className="grid gap-2">
                   <Label htmlFor="image">Image URL</Label>
-                  <Input id="image" name="image" type="url" placeholder="https://..." />
+                  <Input id="image" name="image" type="url" defaultValue={product.image} />
                 </div>
               </CardContent>
             </Card>
 
             <Card>
-              <CardHeader>
-                <CardTitle>Visibility</CardTitle>
-              </CardHeader>
+              <CardHeader><CardTitle>Visibility</CardTitle></CardHeader>
               <CardContent className="grid gap-3">
                 <div className="flex items-center gap-2">
-                  <Checkbox id="isFeatured" name="isFeatured" />
+                  <Checkbox id="isFeatured" name="isFeatured" defaultChecked={product.isFeatured} />
                   <Label htmlFor="isFeatured">Featured product</Label>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Checkbox id="isNew" name="isNew" />
+                  <Checkbox id="isNew" name="isNew" defaultChecked={product.isNew} />
                   <Label htmlFor="isNew">Mark as New</Label>
                 </div>
               </CardContent>
             </Card>
           </div>
-        </div>
-
-        <div className="flex items-center justify-center gap-2 md:hidden">
-          <Button variant="outline" size="sm" type="button" asChild>
-            <Link href="/admin/products">Discard</Link>
-          </Button>
-          <SubmitButton />
         </div>
       </div>
     </form>

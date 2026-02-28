@@ -82,9 +82,6 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
                   image: product.image
                 }}
               />
-              <button className="cursor-pointer flex-1 h-12 border border-input bg-background hover:bg-accent hover:text-accent-foreground inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring">
-                Buy Now
-              </button>
             </div>
           </div>
 

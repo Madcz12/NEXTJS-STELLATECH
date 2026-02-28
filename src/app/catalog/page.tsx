@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Filter } from "lucide-react";
+import { Filter, Search } from "lucide-react";
 import { getAllProducts } from "@/lib/actions/products";
 
 export default async function CatalogPage() {
@@ -11,7 +11,16 @@ export default async function CatalogPage() {
         <aside className="w-full md:w-64 space-y-6">
           <div className="flex items-center gap-2 pb-4 border-b">
             <Filter className="h-5 w-5" />
-            <h2 className="text-lg font-semibold">Filters</h2>
+            <h2 className="text-lg font-semibold">Filters & Search</h2>
+          </div>
+
+          <div className="relative group">
+            <Search className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground group-focus-within:text-primary transition-colors" />
+            <input
+              type="search"
+              placeholder="Search products..."
+              className="h-9 w-full rounded-full border border-input bg-background/50 pl-9 pr-4 text-sm shadow-sm transition-all focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary"
+            />
           </div>
           
           <div className="space-y-4">

@@ -7,6 +7,7 @@ import { useAppDispatch } from "@/store/hooks";
 import { addToCart } from "@/store/cartSlice";
 import { useState } from "react";
 import { toast } from "sonner";
+import { useSession } from "next-auth/react";
 
 interface AddToCartButtonProps {
   product: {
@@ -18,12 +19,14 @@ interface AddToCartButtonProps {
   variant?: "default" | "icon";
 }
 
-// ... imports
+
 
 export function AddToCartButton({ product, variant = "default" }: AddToCartButtonProps) {
+  const { data: session } = useSession();
   const dispatch = useAppDispatch();
   const [isLoading, setIsLoading] = useState(false);
   const [added, setAdded] = useState(false);
+
 
   const handleAddToCart = () => {
     setIsLoading(true);

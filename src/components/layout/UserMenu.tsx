@@ -11,8 +11,10 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { logout } from "@/lib/actions/auth";
+import { signOut } from "next-auth/react";
 import { useTransition } from "react";
+import { useDispatch } from "react-redux";
+import { clearCart } from "@/store/cartSlice";
 
 interface UserMenuProps {
   user: {
@@ -24,10 +26,16 @@ interface UserMenuProps {
 
 export function UserMenu({ user }: UserMenuProps) {
   const [isPending, startTransition] = useTransition();
+  const dispatch = useDispatch();
 
   const handleLogout = () => {
     startTransition(async () => {
-      await logout();
+      // Clear Redux store
+      dispatch(clearCart());
+      // Clear localStorage
+      localStorage.removeItem('cart');
+      
+      await signOut({ callbackUrl: '/login' });
     });
   };
 

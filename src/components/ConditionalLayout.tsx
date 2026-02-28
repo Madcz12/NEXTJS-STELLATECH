@@ -10,8 +10,9 @@ interface ConditionalLayoutProps {
 export function ConditionalLayout({ header, children }: ConditionalLayoutProps) {
   const pathname = usePathname();
   const isAuthPage = pathname?.startsWith("/login") || pathname?.startsWith("/register");
+  const isAdminPage = pathname?.startsWith("/admin");
 
-  if (isAuthPage) {
+  if (isAuthPage || isAdminPage) {
     return <>{children}</>;
   }
 

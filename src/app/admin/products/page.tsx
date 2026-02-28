@@ -1,6 +1,5 @@
 import Link from "next/link";
-import { Plus, MoreHorizontal, Pencil, Trash } from "lucide-react";
-
+import { Plus, Pencil, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -10,14 +9,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import {
   Table,
   TableBody,
   TableCell,
@@ -26,6 +17,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { getAllProducts } from "@/lib/actions/products";
+import { deleteProduct } from "@/lib/actions/admin";
 
 export default async function AdminProductsPage() {
   const products = await getAllProducts();
@@ -44,28 +36,19 @@ export default async function AdminProductsPage() {
         <CardHeader>
           <CardTitle>Inventory</CardTitle>
           <CardDescription>
-            Manage your products and view their sales performance.
+            {products.length} products in the catalog.
           </CardDescription>
         </CardHeader>
         <CardContent>
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead className="hidden w-[100px] sm:table-cell">
-                  Image
-                </TableHead>
+                <TableHead className="hidden w-[80px] sm:table-cell">Image</TableHead>
                 <TableHead>Name</TableHead>
-                <TableHead>Status</TableHead>
+                <TableHead>Category</TableHead>
                 <TableHead>Price</TableHead>
-                <TableHead className="hidden md:table-cell">
-                  Total Sales
-                </TableHead>
-                <TableHead className="hidden md:table-cell">
-                  Created at
-                </TableHead>
-                <TableHead>
-                  <span className="sr-only">Actions</span>
-                </TableHead>
+                <TableHead className="text-center">Stock</TableHead>
+                <TableHead><span className="sr-only">Actions</span></TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -73,50 +56,45 @@ export default async function AdminProductsPage() {
                 <TableRow key={product.id}>
                   <TableCell className="hidden sm:table-cell">
                     <img
-                      alt="Product image"
+                      alt={product.name}
                       className="aspect-square rounded-md object-cover"
-                      height="64"
+                      height="56"
+                      width="56"
                       src={product.image}
-                      width="64"
                     />
                   </TableCell>
-                  <TableCell className="font-medium">
-                    {product.name}
-                  </TableCell>
-                  <TableCell>
-                    <span className="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
-                      Active
+                  <TableCell className="font-medium">{product.name}</TableCell>
+                  <TableCell className="text-muted-foreground">{product.category.name}</TableCell>
+                  <TableCell>${product.price.toString()}</TableCell>
+                  <TableCell className="text-center">
+                    <span className={`font-semibold ${product.stock < 20 ? "text-orange-500" : "text-green-600"}`}>
+                      {product.stock}
                     </span>
                   </TableCell>
-                  <TableCell className="font-medium">${product.price.toString()}</TableCell>
-                  <TableCell className="hidden md:table-cell">
-                    25
-                  </TableCell>
-                  <TableCell className="hidden md:table-cell">
-                    2023-07-12 10:42 AM
-                  </TableCell>
                   <TableCell>
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
+                    <div className="flex items-center gap-1 justify-end">
+                      <Button asChild variant="ghost" size="icon" title="Edit">
+                        <Link href={`/admin/products/${product.id}/edit`}>
+                          <Pencil className="h-4 w-4" />
+                        </Link>
+                      </Button>
+                      <form
+                        action={async () => {
+                          "use server";
+                          await deleteProduct(product.id);
+                        }}
+                      >
                         <Button
-                          aria-haspopup="true"
-                          size="icon"
+                          type="submit"
                           variant="ghost"
+                          size="icon"
+                          title="Delete"
+                          className="text-destructive hover:text-destructive hover:bg-destructive/10"
                         >
-                          <MoreHorizontal className="h-4 w-4" />
-                          <span className="sr-only">Toggle menu</span>
+                          <Trash2 className="h-4 w-4" />
                         </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
-                        <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                        <DropdownMenuItem>
-                            <Pencil className="mr-2 h-4 w-4" /> Edit
-                        </DropdownMenuItem>
-                        <DropdownMenuItem className="text-destructive font-medium">
-                            <Trash className="mr-2 h-4 w-4" /> Delete
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
+                      </form>
+                    </div>
                   </TableCell>
                 </TableRow>
               ))}

@@ -23,7 +23,7 @@ export async function Header() {
   return (
     <>
       <PushNotificationManager />
-      <header className="sticky top-0 z-50 w-full mb-8">
+      <header className="relative z-50 w-full mb-8">
         <div className="mx-4 mt-4 rounded-2xl border border-white/10 bg-background/70 backdrop-blur-xl shadow-2xl supports-[backdrop-filter]:bg-background/60">
           <div className="container flex h-16 items-center justify-between px-6">
             <Link href="/" className="flex items-center gap-2 group">
@@ -49,22 +49,23 @@ export async function Header() {
             </nav>
 
             <div className="flex items-center gap-3">
-              <div className="relative hidden sm:block group">
-                <Search className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground group-focus-within:text-primary transition-colors" />
-                <input
-                  type="search"
-                  placeholder="Search gear..."
-                  className="h-9 w-64 rounded-full border border-input bg-background/50 pl-9 pr-4 text-sm shadow-sm transition-all focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary focus-visible:w-72"
-                />
-              </div>
-
               <div className="pl-4 flex items-center gap-2 border-l border-border/50">
-                <Link href="/cart">
-                  <Button variant="ghost" size="icon" className="relative hover:bg-primary/10 hover:text-primary">
-                    <ShoppingCart className="h-5 w-5" />
-                    <CartCount />
-                  </Button>
-                </Link>
+                {session?.user && (
+                  <Link href="/cart">
+                    <Button variant="ghost" size="icon" className="relative hover:bg-primary/10 hover:text-primary">
+                      <ShoppingCart className="h-5 w-5" />
+                      <CartCount />
+                    </Button>
+                  </Link>
+                )}
+
+                {(session?.user as ExtendedUser)?.role === 'ADMIN' && (
+                  <Link href="/admin">
+                    <Button variant="ghost" size="sm" className="hover:bg-primary/10 hover:text-primary font-semibold text-xs tracking-wide">
+                      Admin
+                    </Button>
+                  </Link>
+                )}
 
                 <NotificationButton />
                 <ThemeToggle />

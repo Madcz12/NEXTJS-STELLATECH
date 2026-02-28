@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { removeFromCart, updateQuantity } from "@/store/cartSlice";
 import { RemoveFromCartButton } from "@/components/cart/RemoveFromCartButton";
+import { CheckoutButton } from "@/components/cart/CheckoutButton";
 
 export default function CartPage() {
   const dispatch = useAppDispatch();
@@ -114,11 +115,7 @@ export default function CartPage() {
               </div>
             </div>
             
-            <Link href="/checkout">
-              <Button className="w-full" size="lg">
-                Proceed to Checkout
-              </Button>
-            </Link>
+            <CheckoutButton />
             
             <Link href="/catalog">
               <Button variant="outline" className="w-full mt-3">
