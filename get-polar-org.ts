@@ -9,9 +9,9 @@ const polar = new Polar({
 
 async function getOrg() {
   try {
-    const orgs = await polar.organizations.list();
-    if (orgs.items && orgs.items.length > 0) {
-      console.log("ORGANIZATION_ID=" + orgs.items[0].id);
+    const res = await polar.organizations.list({});
+    if (res.result.items && res.result.items.length > 0) {
+      console.log("ORGANIZATION_ID=" + res.result.items[0].id);
     } else {
       console.log("No organizations found for this token.");
     }
