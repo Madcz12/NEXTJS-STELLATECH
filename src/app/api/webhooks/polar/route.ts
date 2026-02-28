@@ -1,6 +1,5 @@
-import { Webhooks } from "@polar-sh/nextjs";
+import { validateEvent } from "@polar-sh/sdk/webhooks";
 import { headers } from "next/headers";
-import { type WebhookOrderCreatedPayload } from "@polar-sh/sdk/models/components/webhookordercreatedpayload.js";
 import { prisma } from "@/lib/prisma";
 
 const webhookSecret = process.env.POLAR_WEBHOOK_SECRET;
@@ -20,24 +19,18 @@ export async function POST(request: Request) {
   }
 
   try {
-    const payload = Webhooks.verify({
-      payload: body,
-      headers: {
-        "webhook-signature": signature,
-      },
-      webhookSecret,
-    });
+    const payload = validateEvent(body, { "webhook-signature": signature }, webhookSecret);
 
     if (payload.type === "order.created") {
-      const orderData = payload.data as WebhookOrderCreatedPayload;
+      const order = payload.data;
       
       // Attempt to link to an existing user by email
       const user = await prisma.user.findUnique({
-        where: { email: orderData.customerEmail },
+        where: { email: order.customer.email },
       });
 
       // Compute total for the local DB
-      const totalAmount = orderData.totalAmount || 0;
+      const totalAmount = order.totalAmount || 0;
 
       // Extract items from Polar order metadata or customName
       // Note: In a robust setup, you might pass your local Product IDs via Polar checkout metadata.
@@ -47,14 +40,14 @@ export async function POST(request: Request) {
 
       await prisma.order.create({
         data: {
-          id: orderData.id, // Store Polar Order ID locally for easy sync
+          id: order.id, // Store Polar Order ID locally for easy sync
           status: "PAID",
           total: totalAmount / 100, // Polar amounts are in cents
           userId: user?.id,
-          // If you need line items mapping, iterate orderData.items here.
+          // If you need line items mapping, iterate order.items here.
         }
       });
-      console.log(`Successfully processed Polar order ${orderData.id}`);
+      console.log(`Successfully processed Polar order ${order.id}`);
     }
 
     return new Response("Webhook processed", { status: 200 });
