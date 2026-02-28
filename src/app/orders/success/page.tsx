@@ -1,6 +1,11 @@
 "use client"
 
 import { Suspense } from "react";
+import { useSearchParams } from "next/navigation";
+import Link from "next/link";
+import { CheckCircle } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 function OrderSuccessContent() {
   const searchParams = useSearchParams();
