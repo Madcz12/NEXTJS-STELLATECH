@@ -1,6 +1,6 @@
 import { Webhooks } from "@polar-sh/nextjs";
 import { headers } from "next/headers";
-import { type WebhookOrderCreatedPayload } from "@polar-sh/sdk/models/components";
+import { type WebhookOrderCreatedPayload } from "@polar-sh/sdk/models/components/webhookordercreatedpayload.js";
 import { prisma } from "@/lib/prisma";
 
 const webhookSecret = process.env.POLAR_WEBHOOK_SECRET;
