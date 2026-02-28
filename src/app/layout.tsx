@@ -7,6 +7,7 @@ import { ConditionalLayout } from "@/components/ConditionalLayout";
 import { PageTransitionLoader } from "@/components/PageTransitionLoader";
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
 import { Toaster } from "sonner";
+import { Suspense } from "react";
 
 import { AuthProvider } from "@/components/providers/AuthProvider";
 
@@ -41,7 +42,9 @@ export default function RootLayout({
         <AuthProvider>
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
             <ReduxProvider>
-              <PageTransitionLoader />
+              <Suspense fallback={null}>
+                <PageTransitionLoader />
+              </Suspense>
               <ConditionalLayout header={<Header />}>
                 {children}
               </ConditionalLayout>
