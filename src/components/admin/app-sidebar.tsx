@@ -29,7 +29,17 @@ import { usePathname } from "next/navigation"
 import { logout } from "@/lib/actions/auth"
 import { useTransition } from "react"
 
-const items = [
+import { type LucideIcon } from "lucide-react"
+
+interface NavItem {
+  title: string
+  url: string
+  icon: LucideIcon
+  enabled: boolean
+  badge?: string | number
+}
+
+const items: NavItem[] = [
   {
     title: "Dashboard",
     url: "/admin",
