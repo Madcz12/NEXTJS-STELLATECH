@@ -95,6 +95,7 @@ export default function CheckoutPage() {
                   purchase_units: [
                     {
                       amount: {
+                        currency_code: "USD",
                         value: total.toFixed(2),
                         breakdown: {
                           item_total: { value: subtotal.toFixed(2), currency_code: "USD" },
