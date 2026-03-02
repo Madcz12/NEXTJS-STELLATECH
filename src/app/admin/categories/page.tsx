@@ -1,6 +1,7 @@
-import Link from "next/link";
-import { Plus, Pencil, Trash2 } from "lucide-react";
+import { Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+  
+
 import {
   Card,
   CardContent,
@@ -16,9 +17,9 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Input } from "@/components/ui/input";
 import { getCategories } from "@/lib/actions/products";
-import { createCategory, deleteCategory } from "@/lib/actions/admin";
+import { deleteCategory } from "@/lib/actions/admin";
+import { CategoryForm } from "@/components/admin/CategoryForm";
 
 export default async function AdminCategoriesPage() {
   const categories = await getCategories();
@@ -36,15 +37,7 @@ export default async function AdminCategoriesPage() {
           <CardDescription>Add a new product category to the catalog.</CardDescription>
         </CardHeader>
         <CardContent>
-          <form action={createCategory} className="flex items-end gap-3">
-            <div className="flex-1 grid gap-1.5">
-              <label htmlFor="name" className="text-sm font-medium">Category Name</label>
-              <Input id="name" name="name" placeholder="e.g., Smartphones" required />
-            </div>
-            <Button type="submit">
-              <Plus className="mr-2 h-4 w-4" /> Add Category
-            </Button>
-          </form>
+          <CategoryForm />
         </CardContent>
       </Card>
 
