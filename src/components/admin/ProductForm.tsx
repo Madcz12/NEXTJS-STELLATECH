@@ -2,6 +2,7 @@
 
 import { useTransition } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { ChevronLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -38,6 +39,7 @@ interface ProductFormProps {
 
 export function ProductForm({ categories, initialData, productId }: ProductFormProps) {
   const [isPending, startTransition] = useTransition();
+  const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -57,6 +59,9 @@ export function ProductForm({ categories, initialData, productId }: ProductFormP
             description: `"${productName}" se ha añadido al catálogo.`,
           });
         }
+        
+        // Redirigir manualmente después del éxito
+        router.push("/admin/products");
       } catch {
         toast.error("Error", {
           description: "No se pudo guardar el producto.",
