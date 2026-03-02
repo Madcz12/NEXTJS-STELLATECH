@@ -13,10 +13,10 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Button } from "@/components/ui/button";
-import { Trash2 } from "lucide-react";
 import { prisma } from "@/lib/prisma";
-import { updateUserRole, deleteUser } from "@/lib/actions/admin";
+import { UserRoleButton } from "@/components/admin/UserRoleButton";
+import { DeleteButton } from "@/components/admin/DeleteButton";
+import { deleteUser } from "@/lib/actions/admin";
 import { auth } from "@/auth";
 
 async function getUsers() {
@@ -75,32 +75,18 @@ export default async function AdminUsersPage() {
                       <div className="flex items-center gap-2 justify-end">
                         {!isCurrentUser && (
                           <>
-                            <form
-                              action={async () => {
-                                "use server";
-                                const newRole = user.role === "ADMIN" ? "CUSTOMER" : "ADMIN";
-                                await updateUserRole(user.id, newRole);
-                              }}
-                            >
-                              <Button type="submit" variant="outline" size="sm">
-                                {user.role === "ADMIN" ? "Make Customer" : "Make Admin"}
-                              </Button>
-                            </form>
-                            <form
+                            <UserRoleButton 
+                              userId={user.id}
+                              currentRole={user.role as "ADMIN" | "CUSTOMER"}
+                              userName={user.name || user.email || "Usuario"}
+                            />
+                            <DeleteButton 
                               action={async () => {
                                 "use server";
                                 await deleteUser(user.id);
                               }}
-                            >
-                              <Button
-                                type="submit"
-                                variant="ghost"
-                                size="icon"
-                                className="text-destructive hover:text-destructive hover:bg-destructive/10"
-                              >
-                                <Trash2 className="h-4 w-4" />
-                              </Button>
-                            </form>
+                              itemName={user.name || user.email || "Usuario"}
+                            />
                           </>
                         )}
                         {isCurrentUser && (

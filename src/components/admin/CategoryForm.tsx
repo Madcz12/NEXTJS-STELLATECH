@@ -23,7 +23,7 @@ export function CategoryForm() {
           description: "Successfully added to your categories.",
         });
         setName(""); // Clear input on success
-      } catch (error) {
+      } catch {
         toast.error("Error", {
           description: "Could not create category. Please try again.",
         });

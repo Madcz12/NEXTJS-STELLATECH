@@ -1,7 +1,5 @@
-import { Trash2 } from "lucide-react";
-import { Button } from "@/components/ui/button";
-  
-
+import { DeleteButton } from "@/components/admin/DeleteButton";
+import { deleteCategory } from "@/lib/actions/admin";
 import {
   Card,
   CardContent,
@@ -18,7 +16,6 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { getCategories } from "@/lib/actions/products";
-import { deleteCategory } from "@/lib/actions/admin";
 import { CategoryForm } from "@/components/admin/CategoryForm";
 
 export default async function AdminCategoriesPage() {
@@ -70,23 +67,15 @@ export default async function AdminCategoriesPage() {
                     </span>
                   </TableCell>
                   <TableCell className="text-right">
-                    <form
+                    <DeleteButton 
                       action={async () => {
                         "use server";
                         await deleteCategory(cat.id);
                       }}
-                    >
-                      <Button
-                        type="submit"
-                        variant="ghost"
-                        size="icon"
-                        className="text-destructive hover:text-destructive hover:bg-destructive/10"
-                        disabled={cat._count.products > 0}
-                        title={cat._count.products > 0 ? "Cannot delete: has products" : "Delete category"}
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
-                    </form>
+                      itemName={cat.name}
+                      disabled={cat._count.products > 0}
+                      disabledTooltip="Cannot delete: has products"
+                    />
                   </TableCell>
                 </TableRow>
               ))}

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Plus, Pencil, Trash2 } from "lucide-react";
+import { Plus, Pencil } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -17,6 +17,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { getAllProducts } from "@/lib/actions/products";
+import { DeleteButton } from "@/components/admin/DeleteButton";
 import { deleteProduct } from "@/lib/actions/admin";
 
 export default async function AdminProductsPage() {
@@ -78,22 +79,13 @@ export default async function AdminProductsPage() {
                           <Pencil className="h-4 w-4" />
                         </Link>
                       </Button>
-                      <form
+                      <DeleteButton 
                         action={async () => {
                           "use server";
                           await deleteProduct(product.id);
                         }}
-                      >
-                        <Button
-                          type="submit"
-                          variant="ghost"
-                          size="icon"
-                          title="Delete"
-                          className="text-destructive hover:text-destructive hover:bg-destructive/10"
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
-                      </form>
+                        itemName={product.name}
+                      />
                     </div>
                   </TableCell>
                 </TableRow>
