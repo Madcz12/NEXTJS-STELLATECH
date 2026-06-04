@@ -1,0 +1,38 @@
+export const products = [
+  {
+    id: "1",
+    name: "Nebula X1 Gaming Laptop",
+    price: 2499,
+    description: "Experience the ultimate gaming performance with the Nebula X1. Featuring the latest RTX 5090 and i9 processor.",
+    category: "Laptops",
+    image: "https://images.unsplash.com/photo-1603302576837-37561b2e2302?q=80&w=1000&auto=format&fit=crop",
+    isNew: true,
+  },
+  {
+    id: "2",
+    name: "Quantum Mechanical Keyboard",
+    price: 199,
+    description: "Tactile, responsive, and durable. The Quantum Mechanical Keyboard is built for professionals and gamers alike.",
+    category: "Peripherals",
+    image: "https://images.unsplash.com/photo-1595225476474-87563907a212?q=80&w=1000&auto=format&fit=crop",
+    isNew: false,
+  },
+  {
+    id: "3",
+    name: "UltraView 4K Monitor",
+    price: 599,
+    description: "Crystal clear resolution with 144Hz refresh rate. Perfect for content creation and gaming.",
+    category: "Monitors",
+    image: "https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?q=80&w=1000&auto=format&fit=crop",
+    isNew: true,
+  },
+  {
+    id: "4",
+    name: "Hyperspeed Wireless Mouse",
+    price: 89,
+    description: "Zero latency, ultra-lightweight design. Dominate the competition.",
+    category: "Peripherals",
+    image: "https://images.unsplash.com/photo-1527814050087-3793815479db?q=80&w=1000&auto=format&fit=crop",
+    isNew: false,
+  },
+];
