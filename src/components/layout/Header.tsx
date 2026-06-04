@@ -24,13 +24,13 @@ export async function Header() {
     <>
       <PushNotificationManager />
       <header className="relative z-50 w-full mb-8">
-        <div className="mx-4 mt-4 rounded-2xl border border-white/10 bg-background/70 backdrop-blur-xl shadow-2xl supports-[backdrop-filter]:bg-background/60">
+        <div className="mx-4 mt-4 rounded-2xl border border-border/30 bg-background/70 backdrop-blur-xl shadow-2xl supports-[backdrop-filter]:bg-background/60">
           <div className="container flex h-16 items-center justify-between px-6">
             <Link href="/" className="flex items-center gap-2 group">
               <div className="h-8 w-8 bg-primary rounded-lg flex items-center justify-center transform group-hover:rotate-12 transition-transform duration-300">
                 <span className="text-white font-bold text-lg">S</span>
               </div>
-              <span className="text-xl font-heading font-bold tracking-tighter bg-gradient-to-r from-foreground to-foreground/60 bg-clip-text text-transparent group-hover:from-primary group-hover:to-purple-400 transition-all duration-300">
+              <span className="text-xl font-heading font-bold tracking-tighter bg-gradient-to-r from-neutral-900 to-neutral-600 dark:from-white dark:to-neutral-400 bg-clip-text text-transparent group-hover:from-violet-600 group-hover:to-fuchsia-500 dark:group-hover:from-cyan-400 dark:group-hover:to-violet-400 transition-all duration-300">
                 STELLA.TECH
               </span>
             </Link>

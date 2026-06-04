@@ -58,7 +58,7 @@ export function AddToCartButton({ product, variant = "default" }: AddToCartButto
         disabled={isLoading || added}
         className={`
           group relative h-10 w-10 overflow-hidden rounded-xl border border-input 
-          bg-background/50 backdrop-blur-sm transition-all duration-300
+          bg-background/50 backdrop-blur-sm transition-all duration-300 cursor-pointer
           hover:border-primary hover:shadow-[0_0_15px_rgba(124,58,237,0.3)]
           disabled:cursor-not-allowed disabled:opacity-50
           ${added ? "border-green-500 bg-green-500/10" : ""}
